@@ -39,7 +39,7 @@ os.makedirs(DOWNLOADS)
 i = 1
 try:
     for p in w:
-        p.save(os.path.join(DOWNLOADS, str(i)+".jpg"), size_label='Original')
+        p.save(os.path.join(DOWNLOADS, str(i)+".jpg"), size_label='Medium')
         i = i+1
 except Exception as e:
     print 'Error getting photos', e
