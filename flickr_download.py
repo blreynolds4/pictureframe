@@ -8,7 +8,7 @@ PI Host 192.168.0.11
 '''
 
 TOKEN_FILE = 'token_file'
-SIX_MONTHS = 61  # in days
+SIX_MONTHS = 90  # in days
 PATH = 'photos'
 DOWNLOADS = 'downloads'
 # Follow Flickr instructions to get api key and secret
@@ -39,7 +39,7 @@ os.makedirs(DOWNLOADS)
 i = 1
 try:
     for p in w:
-        p.save(os.path.join(DOWNLOADS, str(i)+".jpg"), size_label='Medium')
+        p.save(os.path.join(DOWNLOADS, str(i)+".jpg"), size_label='Original')
         i = i+1
 except Exception as e:
     print 'Error getting photos', e
