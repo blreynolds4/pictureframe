@@ -2,6 +2,7 @@ import flickr_api
 from datetime import date, timedelta
 import os.path
 import shutil
+import time
 
 '''
 PI Host 192.168.0.4
@@ -36,14 +37,25 @@ if os.path.isdir(DOWNLOADS):
     shutil.rmtree(DOWNLOADS)
 os.makedirs(DOWNLOADS)
 
-print("Attempting to download", len(w),"photos...")
+print "Attempting to download", len(w), "photos..."
 i = 1
 try:
     for p in w:
-        p.save(os.path.join(DOWNLOADS, str(i)+".jpg"), size_label='Original')
-        i = i+1
-	if i % 25 == 0:
-	   print("Downloaded", i, "photos")
+        attempt = 1
+        while attempt <= 5:
+            try:
+                p.save(os.path.join(DOWNLOADS, "%04d.jpg" % (i,)), size_label='Original')
+                if attempt > 1:
+                    print 'Success after failure'
+                i = i+1
+                break
+            except Exception as e:
+                print "Retrying after error", e
+                attempt = attempt + 1
+                time.sleep(1)
+
+        if (i % 25) == 0:
+            print "Downloaded", i, "photos..."
 except Exception as e:
     print 'Error getting photos', e
 
@@ -54,4 +66,4 @@ if i > 10:
 else:
     shutil.rmtree(DOWNLOADS)
 
-print 'Downloaded', i, 'photos.'
+print 'Finished downloading', i, 'photos.'
