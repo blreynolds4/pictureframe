@@ -4,11 +4,11 @@ import os.path
 import shutil
 
 '''
-PI Host 192.168.0.11
+PI Host 192.168.0.4
 '''
 
 TOKEN_FILE = 'token_file'
-SIX_MONTHS = 90  # in days
+SIX_MONTHS = 182  # in days
 PATH = 'photos'
 DOWNLOADS = 'downloads'
 # Follow Flickr instructions to get api key and secret
@@ -36,11 +36,14 @@ if os.path.isdir(DOWNLOADS):
     shutil.rmtree(DOWNLOADS)
 os.makedirs(DOWNLOADS)
 
+print("Attempting to download", len(w),"photos...")
 i = 1
 try:
     for p in w:
         p.save(os.path.join(DOWNLOADS, str(i)+".jpg"), size_label='Original')
         i = i+1
+	if i % 25 == 0:
+	   print("Downloaded", i, "photos")
 except Exception as e:
     print 'Error getting photos', e
 
