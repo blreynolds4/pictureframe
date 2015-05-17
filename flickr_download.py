@@ -1,9 +1,23 @@
 import flickr_api
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import os.path
 import shutil
 import time
+import logging
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+logger.addHandler(ch)
+lh = logging.FileHandler('flickr_download.log', mode='w')
+lh.setLevel(logging.DEBUG)
+lh.setFormatter(formatter)
+logger.addHandler(lh)
+
+#
 '''
 PI Host 192.168.0.4
 '''
@@ -16,6 +30,7 @@ DOWNLOADS = 'downloads'
 # Follow directions here to
 # generate a OAUTH token
 # https://github.com/alexis-mignon/python-flickr-api/wiki/Tutorial
+
 flickr_api.set_auth_handler(TOKEN_FILE)
 user = flickr_api.test.login()
 
@@ -23,7 +38,8 @@ today = date.today()
 
 start = today - timedelta(SIX_MONTHS)
 
-print 'Getting photos taken after', start.isoformat()
+logger.info("Starting photo download %s", datetime.now().isoformat())
+logger.info('Getting photos taken after %s', start.isoformat())
 w = flickr_api.Walker(flickr_api.Photo.search,
                       user=user,
                       min_taken_date=start.isoformat())
@@ -37,7 +53,7 @@ if os.path.isdir(DOWNLOADS):
     shutil.rmtree(DOWNLOADS)
 os.makedirs(DOWNLOADS)
 
-print "Attempting to download", len(w), "photos..."
+logger.info("Attempting to download %d photos...", len(w))
 i = 1
 try:
     for p in w:
@@ -46,18 +62,18 @@ try:
             try:
                 p.save(os.path.join(DOWNLOADS, "%04d.jpg" % (i,)), size_label='Original')
                 if attempt > 1:
-                    print 'Success after failure'
+                    logger.info('Success after failure')
                 i = i+1
                 break
             except Exception as e:
-                print "Retrying after error", e
+                logger.warn("Retrying after error", e)
                 attempt = attempt + 1
                 time.sleep(1)
 
         if (i % 25) == 0:
-            print "Downloaded", i, "photos..."
+            logger.info("Downloaded %d photos...", i)
 except Exception as e:
-    print 'Error getting photos', e
+    logger.error('Error getting photos', e)
 
 if i > 10:
     if os.path.isdir(PATH):
@@ -66,4 +82,4 @@ if i > 10:
 else:
     shutil.rmtree(DOWNLOADS)
 
-print 'Finished downloading', i, 'photos.'
+logger.info('Finished downloading %d photos at %s.', i, datetime.now().isoformat())
