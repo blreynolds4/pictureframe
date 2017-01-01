@@ -1,7 +1,6 @@
 downloads
 photos
-token_file
-flickr_keys.py
+flickr
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
