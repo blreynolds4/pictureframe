@@ -11,4 +11,7 @@ http://raspberrypihobbyist.blogspot.com/2013/02/jumbo-digital-picture-frame.html
 Based on flicker api:
 https://github.com/alexis-mignon/python-flickr-api
 
+To preset network info:  https://learn.adafruit.com/adafruits-raspberry-pi-lesson-3-network-setup/setting-up-wifi-with-occidentalis
+
+
 
