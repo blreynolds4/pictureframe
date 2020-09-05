@@ -22,8 +22,6 @@ PATH = 'photos'
 DOWNLOADS = 'downloads'
 THREE_MONTHS = 91
 
-# "GET /?oauth_token=72157676847105361-61b14e34f1f033d5&oauth_verifier=5b4ac02ff1efddfc HTTP/1.1"
-
 
 def getUrl(size, sizes):
     '''
